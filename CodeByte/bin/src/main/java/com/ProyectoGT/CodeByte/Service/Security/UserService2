@@ -1,0 +1,69 @@
+package com.ProyectoGT.CodeByte.Service.Security;
+
+import java.util.Optional;
+
+import com.ProyectoGT.CodeByte.IRepository.Security.IUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.ProyectoGT.CodeByte.Config.Security.PasswordGenerator;
+import com.ProyectoGT.CodeByte.DTO.IUserDTO;
+import com.ProyectoGT.CodeByte.Entity.Security.User;
+import com.ProyectoGT.CodeByte.IService.Security.IUserService;
+import com.ProyectoGT.CodeByte.Service.ObjectT.ObjectTService;
+
+@Service
+public class UserService extends ObjectTService<User> implements IUserService {
+
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private IUserRepository userRepository;
+
+    @Autowired
+    private JavaMailSender mailSender; // Asegúrate de que esto esté configurado
+
+    public UserService(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public Optional<IUserDTO> getUserDTO(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public User saveUsuarioJwt(User usuario) throws Exception {
+        // Generar una contraseña por defecto si no se proporciona
+        if (usuario.getContrasenia() == null || usuario.getContrasenia().isEmpty()) {
+            String contraseñaPorDefecto = PasswordGenerator.generarContraseña();
+            usuario.setContrasenia(contraseñaPorDefecto);
+            enviarCorreo(usuario.getPersonId().getEmail(), contraseñaPorDefecto);
+        }
+
+        // Encriptar la contraseña
+        String encodedPassword = passwordEncoder.encode(usuario.getContrasenia());
+        usuario.setContrasenia(encodedPassword);
+        return userRepository.save(usuario);
+    }
+
+    private void enviarCorreo(String email, String contraseña) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Bienvenido a nuestra plataforma!");
+        
+        String contenido = "Hola,\n\n" +
+                           "Gracias por registrarte en nuestra página. " +
+                           "Tu contraseña por defecto es: " + contraseña + "\n\n" +
+                           "Por favor, recuerda agregar tus datos personales en tu perfil " +
+                           "para completar tu registro.\n\n" +
+                           "Saludos cordiales,\n" +
+                           "El equipo de soporte.";
+        
+        message.setText(contenido);
+        mailSender.send(message);
+    }
+}

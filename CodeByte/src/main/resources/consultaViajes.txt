@@ -1,0 +1,92 @@
+
+INSERT INTO conpany (
+    created_at, 
+    updated_at, 
+    status, 
+    name, 
+    address, 
+    nit, 
+    phone_number, 
+    email, 
+    manager_name, 
+    phone_number_manager, 
+    email_manager, 
+    deleated_at
+) VALUES (
+    '2024-10-16T07:00:00.000Z', 
+    '2024-10-16T07:00:00.000Z', 
+    true, 
+    'Transporte Rápido', 
+    'Calle Falsa 123', 
+    987654321, 
+    3109876543, 
+    'info@transporterapid.com', 
+    'Laura Gómez', 
+    3123456789, 
+    'laura.gomez@transporterapid.com', 
+    '2024-10-16T07:00:00.000Z'
+);
+
+INSERT INTO bus (
+    created_at, 
+    updated_at, 
+    status, 
+    placa, 
+    maximum_seats, 
+    company_id, 
+    deleated_at
+) VALUES (
+    '2024-10-16T07:05:00.000Z', 
+    '2024-10-16T07:05:00.000Z', 
+    true, 
+    'XYZ456', 
+    40, 
+    1,  
+    '2024-10-16T07:05:00.000Z'
+);
+
+INSERT INTO  tourisit_site(
+    created_at, 
+    updated_at, 
+    status, 
+    nae, 
+    location, 
+    map, 
+    deleated_at
+) VALUES (
+    '2024-10-16T07:10:00.000Z', 
+    '2024-10-16T07:10:00.000Z', 
+    true, 
+    'Isla Paraíso', 
+    'Calle del Mar #45-67', 
+    'https://maps.example.com/isla_paraiso', 
+    '2024-10-16T07:10:00.000Z'
+);
+
+INSERT INTO travel_packages (
+    created_at, 
+    updated_at, 
+    status, 
+    price, 
+    description, 
+    departure_date, 
+    return_date, 
+    place_of_departure, 
+    availability_number, 
+    bus_id, 
+	tourisit_site_id, 
+    deleated_at
+) VALUES (
+    '2024-10-16T07:15:00.000Z', 
+    '2024-10-16T07:15:00.000Z', 
+    true, 
+    200.00, 
+    'Excursión a Isla Paraíso', 
+    '2024-10-25T09:00:00.000Z', 
+    '2024-10-25T17:00:00.000Z', 
+    'Puerto Principal', 
+    15, 
+    1, 
+    1,  
+    '2024-10-16T07:15:00.000Z'
+);
